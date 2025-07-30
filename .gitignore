@@ -1,0 +1,65 @@
+# --- C++ Build Artifacts ---
+build/
+/build/
+/bin/
+/lib/
+/out/
+/*.o
+/*.obj
+/*.a
+/*.lib
+/*.so
+/*.dll
+/*.exe
+/*.app
+/*.dylib
+
+# --- CMake ---
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+build.ninja
+rules.ninja
+compile_commands.json
+Testing/
+CTestTestfile.cmake
+_install/
+
+# --- VS Code ---
+.vscode/
+*.code-workspace
+
+# --- Mac OS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+.DS_Store?
+.DS_Store
+
+# --- Windows ---
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# --- Ninja build ---
+.ninja_deps
+.ninja_log
+
+# --- Logs and Misc ---
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+*.old
+
+# --- External/Dependencies (customize as needed) ---
+/external/*/
+!external/.gitkeep
+!external/README.md
