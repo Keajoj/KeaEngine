@@ -1,6 +1,5 @@
 # --- C++ Build Artifacts ---
 build/
-/build/
 /bin/
 /lib/
 /out/
@@ -13,6 +12,7 @@ build/
 /*.exe
 /*.app
 /*.dylib
+.cache/
 
 # --- CMake ---
 CMakeFiles/
@@ -29,6 +29,8 @@ _install/
 # --- VS Code ---
 .vscode/
 *.code-workspace
+.clang-format
+.notes
 
 # --- Mac OS ---
 .DS_Store
