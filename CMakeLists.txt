@@ -1,11 +1,24 @@
-cmake_minimum_required(VERSION 3.16)
-project(KeaEngine LANGUAGES CXX)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20)
+PROJECT(KeaEngine)
+# Find dependencies
+FIND_PACKAGE(glm CONFIG REQUIRED)
+FIND_PACKAGE(glad CONFIG REQUIRED)
+FIND_PACKAGE(glfw3 CONFIG REQUIRED)
+# Engine library
+FILE(GLOB_RECURSE ENGINE_SRC CONFIGURE_DEPENDS engine/src/*.cpp)
+FILE(GLOB_RECURSE ENGINE_HEADERS CONFIGURE_DEPENDS engine/include/*.hpp)
+ADD_LIBRARY(KeaEngine STATIC ${ENGINE_SRC} ${ENGINE_HEADERS})
+TARGET_INCLUDE_DIRECTORIES(
+    KeaEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/engine/include
+)
+TARGET_LINK_LIBRARIES(KeaEngine PUBLIC glad::glad glfw glm::glm)
 
-set(CMAKE_CXX_STANDARD 20)
+# Test executable
+FILE(GLOB_RECURSE TEST_SRC CONFIGURE_DEPENDS test/*.cpp)
+ADD_EXECUTABLE(KeaTest ${TEST_SRC})
+TARGET_LINK_LIBRARIES(KeaTest PRIVATE KeaEngine)
 
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # For IDEs, clangd, etc.
-
-
-add_subdirectory(engine)
-
+# (Optional) if you want to include engine headers in test files:
+TARGET_INCLUDE_DIRECTORIES(
+    KeaTest PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/include
+)

@@ -31,6 +31,7 @@ _install/
 *.code-workspace
 .clang-format
 .notes
+.cmake-format.yaml
 
 # --- Mac OS ---
 .DS_Store

@@ -1,3 +1,4 @@
-#include <glad/glad.h>
-#include <glfw/glfw3.h>
-#include <glm/glm.hpp>
+#ifndef KEA_ENGINE_INCLUDE_ENGINE_ENGINE_HPP
+#define KEA_ENGINE_INCLUDE_ENGINE_ENGINE_HPP
+
+#endif /* KEA_ENGINE_INCLUDE_ENGINE_ENGINE_HPP */
