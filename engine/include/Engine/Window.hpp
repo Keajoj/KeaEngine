@@ -11,14 +11,11 @@
 class Window
 {
   public:
-
-  public:
     Window(int width, int height, const std::string title);
     ~Window();
 
     bool ShouldClose() const;
     void PollEvents() const;
-
     void BeginFrame(/*const glm::vec4 &clearColor*/);
     void EndFrame();
 
@@ -30,9 +27,16 @@ class Window
     void WaitEvents() const;
     void WaitEventsTimeout(double timeout) const;
 
+    void SetCursorEnabled(bool enabled);
+    bool IsCursorEnabled() const;
+    void SetRawMouseMotion(bool useRawMouseMotion);
+    bool IsRawMouseMotionEnabled() const;
+
   private:
     GLFWwindow* m_Window;
     bool m_VerticalSyncEnabled;
+    bool m_CursorEnabled;
+    bool m_RawMouseMotionEnabled;
 
   private:
     void InitGLFW(int width, int height, const std::string title);
@@ -40,6 +44,13 @@ class Window
     void InitImGui();
     void ShutdownImGui();
 
+  private:
+    void SetFramebufferSizeCallback(GLFWframebuffersizefun callback);
+    void SetKeyCallback(GLFWkeyfun callback);
+    void SetMousePosCallback(GLFWcursorposfun callback);
+    void SetMouseButtonCallback(GLFWmousebuttonfun callback);
+
+  private:
     static void error_callback(int error, const char* description);
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 };

@@ -91,12 +91,16 @@ void Window::InitGLAD()
 
 void Window::InitImGui()
 {
-    //
+    // todo
 }
 
 void Window::ShutdownImGui()
 {
-    //
+    // todo
+}
+
+void Window::SetFramebufferSizeCallback(GLFWframebuffersizefun callback)
+{
 }
 
 void Window::error_callback(int error, const char* description)
