@@ -1,9 +1,7 @@
-#ifndef KEA_ENGINE_INCLUDE_ENGINE_WINDOW_HPP
-#define KEA_ENGINE_INCLUDE_ENGINE_WINDOW_HPP
+#ifndef KEA_ENGINE_WINDOW_HPP
+#define KEA_ENGINE_WINDOW_HPP
 
-#define GLAD_GL_IMPLEMENTATION
 #include "glad/glad.h"
-#define GLFW_INCLUDE_NONE
 #include "glfw/glfw3.h"
 
 #include <string>
@@ -14,19 +12,18 @@ class Window
     Window(int width, int height, const std::string title);
     ~Window();
 
+    GLFWwindow* GetGLFWwindow() const;
+
     bool ShouldClose() const;
-    void PollEvents() const;
     void BeginFrame(/*const glm::vec4 &clearColor*/);
     void EndFrame();
 
-    GLFWwindow* GetGLFWwindow() const;
-
-    void SetVerticalSync(bool enabled);
-    bool IsVerticalSyncEnabled() const;
-
+    void PollEvents() const;
     void WaitEvents() const;
     void WaitEventsTimeout(double timeout) const;
 
+    void SetVerticalSync(bool enabled);
+    bool IsVerticalSyncEnabled() const;
     void SetCursorEnabled(bool enabled);
     bool IsCursorEnabled() const;
     void SetRawMouseMotion(bool useRawMouseMotion);
@@ -43,16 +40,19 @@ class Window
     void InitGLAD();
     void InitImGui();
     void ShutdownImGui();
+    void RegisterInputEvents();
 
   private:
+    void SetErrorCallback(GLFWerrorfun callback);
     void SetFramebufferSizeCallback(GLFWframebuffersizefun callback);
     void SetKeyCallback(GLFWkeyfun callback);
     void SetMousePosCallback(GLFWcursorposfun callback);
     void SetMouseButtonCallback(GLFWmousebuttonfun callback);
+    void SetScrollCallback(GLFWscrollfun callback);
 
   private:
     static void error_callback(int error, const char* description);
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 };
 
-#endif /* KEA_ENGINE_INCLUDE_ENGINE_WINDOW_HPP */
+#endif /* KEA_ENGINE_WINDOW_HPP */

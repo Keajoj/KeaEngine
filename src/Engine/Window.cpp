@@ -1,4 +1,5 @@
-#include "Engine/Window.hpp"
+#include "Window.hpp"
+#include "Input.hpp"
 
 #include <iostream>
 
@@ -7,6 +8,7 @@ Window::Window(int width, int height, const std::string title)
     InitGLFW(width, height, title);
     InitGLAD();
     InitImGui();
+    RegisterInputEvents();
 }
 
 Window::~Window()
@@ -23,6 +25,7 @@ bool Window::ShouldClose() const
 
 void Window::PollEvents() const
 {
+    Kea::Input::Instance().Update();
     glfwPollEvents();
 }
 
@@ -56,10 +59,37 @@ bool Window::IsVerticalSyncEnabled() const
     return m_VerticalSyncEnabled;
 }
 
+void Window::SetCursorEnabled(bool enabled)
+{
+    m_CursorEnabled = enabled;
+    glfwSetInputMode(m_Window, GLFW_CURSOR, m_CursorEnabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+}
+
+bool Window::IsCursorEnabled() const
+{
+    return m_CursorEnabled;
+}
+
+void Window::SetRawMouseMotion(bool useRawMouseMotion)
+{
+    if (!glfwRawMouseMotionSupported())
+    {
+        std::cout << "Raw mouse motion is not supported on this device. Setting ignored.\n";
+        return;
+    }
+    m_RawMouseMotionEnabled = useRawMouseMotion;
+    glfwSetInputMode(m_Window, GLFW_RAW_MOUSE_MOTION, m_RawMouseMotionEnabled ? GLFW_TRUE : GLFW_FALSE);
+}
+
+bool Window::IsRawMouseMotionEnabled() const
+{
+    return m_RawMouseMotionEnabled;
+}
+
 void Window::InitGLFW(int width, int height, const std::string title)
 {
-    glfwSetErrorCallback(error_callback); // We can actually call this BEFORE initialization
-    if (!glfwInit())                      // Check for successful initialization
+    SetErrorCallback(error_callback); // We can actually call this BEFORE initialization
+    if (!glfwInit())                  // Check for successful initialization
     {
         std::cerr << "GLFW Initialization failed. Program will close." << std::endl;
         exit(EXIT_FAILURE);
@@ -82,6 +112,7 @@ void Window::InitGLFW(int width, int height, const std::string title)
 
     glfwMakeContextCurrent(m_Window);
     glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback);
+    SetFramebufferSizeCallback(framebuffer_size_callback);
 }
 
 void Window::InitGLAD()
@@ -99,8 +130,43 @@ void Window::ShutdownImGui()
     // todo
 }
 
+void Window::RegisterInputEvents()
+{
+    Kea::Input::Instance().Initialize();
+    SetKeyCallback(Kea::Input::KeyCallback);
+    SetMousePosCallback(Kea::Input::CursorPositionCallback);
+    SetMouseButtonCallback(Kea::Input::MouseButtonCallback);
+    SetScrollCallback(Kea::Input::ScrollCallback);
+}
+
+void Window::SetErrorCallback(GLFWerrorfun callback)
+{
+    glfwSetErrorCallback(callback);
+}
+
 void Window::SetFramebufferSizeCallback(GLFWframebuffersizefun callback)
 {
+    glfwSetFramebufferSizeCallback(m_Window, callback);
+}
+
+void Window::SetKeyCallback(GLFWkeyfun callback)
+{
+    glfwSetKeyCallback(m_Window, callback);
+}
+
+void Window::SetMousePosCallback(GLFWcursorposfun callback)
+{
+    glfwSetCursorPosCallback(m_Window, callback);
+}
+
+void Window::SetMouseButtonCallback(GLFWmousebuttonfun callback)
+{
+    glfwSetMouseButtonCallback(m_Window, callback);
+}
+
+void Window::SetScrollCallback(GLFWscrollfun callback)
+{
+    glfwSetScrollCallback(m_Window, callback);
 }
 
 void Window::error_callback(int error, const char* description)
