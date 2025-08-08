@@ -1,12 +1,12 @@
-#ifndef KEA_ENGINE_LOG_HPP
-#define KEA_ENGINE_LOG_HPP
+#ifndef KEA_CORE_LOG_HPP
+#define KEA_CORE_LOG_HPP
 
 #include <spdlog/fmt/ostr.h> // For streaming custom types
 #include <spdlog/spdlog.h>
 
 namespace Kea::Log
 {
-void Init(); // Call at program startup
+void Initialize(); // Call at program startup
 std::shared_ptr<spdlog::logger>& GetLogger();
 } // namespace Kea::Log
 
@@ -26,4 +26,4 @@ std::shared_ptr<spdlog::logger>& GetLogger();
 #define KEA_LOG_DEBUG(...)
 #endif
 
-#endif // KEA_ENGINE_LOG_HPP
+#endif /* KEA_CORE_LOG_HPP */

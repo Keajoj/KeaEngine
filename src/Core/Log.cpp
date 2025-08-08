@@ -12,7 +12,7 @@ namespace
 std::shared_ptr<spdlog::logger> logger;
 }
 
-void Init()
+void Initialize()
 {
     // Console sink (color)
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
@@ -31,6 +31,13 @@ void Init()
     spdlog::flush_on(spdlog::level::warn); // Flush logs on warnings/errors
 
     KEA_LOG_INFO("Logger initialized!");
+
+    KEA_LOG_TRACE("This is what a {} looks like.", "KEA_LOG_TRACE");
+    KEA_LOG_DEBUG("This is what a {} looks like.", "KEA_LOG_DEBUG");
+    KEA_LOG_INFO("This is what a {} looks like.", "KEA_LOG_INFO");
+    KEA_LOG_WARN("This is what a {} looks like.", "KEA_LOG_WARN");
+    KEA_LOG_ERROR("This is what a {} looks like.", "KEA_LOG_ERROR");
+    KEA_LOG_CRITICAL("This is what a {} looks like.", "KEA_LOG_CRITICAL");
 }
 
 std::shared_ptr<spdlog::logger>& GetLogger()

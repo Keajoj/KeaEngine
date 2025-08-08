@@ -29,9 +29,9 @@ _install/
 # --- VS Code ---
 .vscode/
 *.code-workspace
-.clang-format
 .notes
 .cmake-format.yaml
+.crossnote/
 
 # --- Mac OS ---
 .DS_Store

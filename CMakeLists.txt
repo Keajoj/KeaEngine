@@ -1,30 +1,18 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.20)
-PROJECT(KeaEngine)
+cmake_minimum_required(VERSION 3.20)
+project(KeaGameEngine)
 
-ADD_COMPILE_DEFINITIONS(GLFW_INCLUDE_NONE)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-SET(CMAKE_CXX_STANDARD 17)
-SET(CMAKE_CXX_STANDARD_REQUIRED ON)
-# Find dependencies
-FIND_PACKAGE(glm CONFIG REQUIRED)
-FIND_PACKAGE(glad CONFIG REQUIRED)
-FIND_PACKAGE(glfw3 CONFIG REQUIRED)
-FIND_PACKAGE(spdlog CONFIG REQUIRED)
-# Engine library
-FILE(GLOB_RECURSE ENGINE_SRC CONFIGURE_DEPENDS src/Engine/*.cpp)
-FILE(GLOB_RECURSE ENGINE_HEADERS CONFIGURE_DEPENDS src/Engine/*.hpp)
-ADD_LIBRARY(KeaEngine STATIC ${ENGINE_SRC} ${ENGINE_HEADERS})
-TARGET_INCLUDE_DIRECTORIES(
-    KeaEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine
-)
-TARGET_LINK_LIBRARIES(KeaEngine PUBLIC glad::glad glfw glm::glm spdlog::spdlog)
+add_compile_definitions(GLFW_INCLUDE_NONE)
 
-# Test executable
-FILE(GLOB_RECURSE TEST_SRC CONFIGURE_DEPENDS test/*.cpp)
-ADD_EXECUTABLE(KeaTest ${TEST_SRC})
-TARGET_LINK_LIBRARIES(KeaTest PRIVATE KeaEngine)
+find_package(glm CONFIG REQUIRED)
+find_package(glad CONFIG REQUIRED)
+find_package(glfw3 CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
+find_package(imgui CONFIG REQUIRED)
 
-# (Optional) if you want to include engine headers in test files:
-TARGET_INCLUDE_DIRECTORIES(
-    KeaTest PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine
-)
+add_subdirectory(src/Core)
+add_subdirectory(src/Engine)
+add_subdirectory(src/Utils)
+add_subdirectory(tests)

@@ -1,8 +1,8 @@
 #ifndef KEA_ENGINE_EVENT_HPP
 #define KEA_ENGINE_EVENT_HPP
 
-#include <any>
 #include "EventType.hpp"
+#include <any>
 
 struct Event
 {
