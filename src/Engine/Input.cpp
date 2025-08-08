@@ -1,5 +1,6 @@
 #include "Input.hpp"
 #include "Log.hpp"
+#include "LogMacros.hpp"
 #include "glm/glm.hpp"
 
 namespace Kea
@@ -96,12 +97,12 @@ void Input::KeyCallback(GLFWwindow* window, int key, int scancode, int action, i
     if (ks.current && !ks.previous)
     {
         // Dispatch KeyPressedEvent
-        KEA_LOG_WARN("KeyPressedEvent: {}", ToString((KeyCode) key));
+        KEA_LOG_INFO("Input", "KeyPressedEvent: {}", ToString((KeyCode) key));
     }
     else if (!ks.current && ks.previous)
     {
         // Dispatch KeyReleasedEvent
-        KEA_LOG_WARN("KeyReleasedEvent: {}", ToString((KeyCode) key));
+        KEA_LOG_INFO("Input", "KeyReleasedEvent: {}", ToString((KeyCode) key));
     }
 }
 
@@ -118,12 +119,12 @@ void Input::MouseButtonCallback(GLFWwindow* window, int button, int action, int 
     if (bs.current && !bs.previous)
     {
         // Dispatch MouseButtonPressedEvent
-        KEA_LOG_ERROR("MouseButtonPressedEvent: {}", ToString((MouseButton) button));
+        KEA_LOG_INFO("Input", "MouseButtonPressedEvent: {}", ToString((MouseButton) button));
     }
     else if (!bs.current && bs.previous)
     {
         // Dispatch MouseButtonReleasedEvent
-        KEA_LOG_ERROR("MouseButtonReleasedEvent: {}", ToString((MouseButton) button));
+        KEA_LOG_INFO("Input", "MouseButtonReleasedEvent: {}", ToString((MouseButton) button));
     }
 }
 
@@ -136,7 +137,8 @@ void Input::CursorPositionCallback(GLFWwindow* window, double xPos, double yPos)
         glm::vec2(xPos - Input::Instance().m_MousePosPrevious.x, yPos - Input::Instance().m_MousePosPrevious.y);
 
     // Dispatch CursorMoveEvent
-    KEA_LOG_INFO("CursorMoveEvent: pos({:>8.3f},{:>8.3f}) delta({:>8.3f},{:>8.3f})", xPos, yPos, delta.x, delta.y);
+    KEA_LOG_INFO("Input", "CursorMoveEvent: pos({:>8.3f},{:>8.3f}) delta({:>8.3f},{:>8.3f})", xPos, yPos, delta.x,
+                 delta.y);
 
     // ? Should we send current position and delta, or current position and last position ?
 }
@@ -146,7 +148,7 @@ void Input::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
     Input::Instance().m_ScrollOffset = glm::vec2(xoffset, yoffset);
 
     // Dispatch ScrollEvent
-    KEA_LOG_CRITICAL("ScrollEvent: {} {}", xoffset, yoffset);
+    KEA_LOG_INFO("Input", "ScrollEvent: {} {}", xoffset, yoffset);
 }
 
 } // namespace Kea

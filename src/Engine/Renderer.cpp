@@ -16,7 +16,8 @@ void Renderer::Initialize()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    KEA_LOG_INFO("Renderer initialized with OpenGL {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
+    KEA_LOG_INFO("Renderer", "Renderer initialized with OpenGL {}",
+                 reinterpret_cast<const char*>(glGetString(GL_VERSION)));
 }
 
 void Renderer::SetupMesh(MeshData* meshData)

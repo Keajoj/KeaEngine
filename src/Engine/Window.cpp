@@ -1,6 +1,6 @@
-#include "Window.hpp"
+#include "Core.hpp"
 #include "Input.hpp"
-#include "Log.hpp"
+#include "Window.hpp"
 
 Window::Window(int width, int height, const std::string title)
 {
@@ -73,7 +73,7 @@ void Window::SetRawMouseMotion(bool useRawMouseMotion)
 {
     if (!glfwRawMouseMotionSupported())
     {
-        KEA_LOG_WARN("Raw mouse motion is not supported on this device. Setting ignored.");
+        KEA_LOG_WARN("Core", "Raw mouse motion is not supported on this device. Setting ignored.");
         return;
     }
     m_RawMouseMotionEnabled = useRawMouseMotion;
@@ -90,7 +90,7 @@ void Window::InitGLFW(int width, int height, const std::string title)
     SetErrorCallback(error_callback); // We can actually call this BEFORE initialization
     if (!glfwInit())                  // Check for successful initialization
     {
-        KEA_LOG_CRITICAL("GLFW Initialization failed. Program will close.");
+        KEA_LOG_CRITICAL("Core", "GLFW Initialization failed. Program will close.");
         exit(EXIT_FAILURE);
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -104,7 +104,7 @@ void Window::InitGLFW(int width, int height, const std::string title)
     m_Window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
     if (!m_Window)
     {
-        KEA_LOG_CRITICAL("Window or OpenGL context creation failed. Program will close.");
+        KEA_LOG_CRITICAL("Core", "Window or OpenGL context creation failed. Program will close.");
         glfwTerminate();
         exit(EXIT_FAILURE);
     }

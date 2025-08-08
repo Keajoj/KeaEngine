@@ -19,9 +19,9 @@ class Mesh
     std::vector<GLuint> indices{};
 
   public:
-    Mesh();
-    Mesh(const ObjLoader::MeshRenderData& data) : vertices(data.vertices), indices(data.indices) {}
-    ~Mesh();
+    Mesh() {};
+    Mesh(const ObjLoader::MeshRenderData& data) : vertices(data.vertices), indices(data.indices) {};
+    ~Mesh() {};
 
   private:
     unsigned int VAO = 0;

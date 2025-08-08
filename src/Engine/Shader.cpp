@@ -1,5 +1,5 @@
+#include "Core.hpp"
 #include "Shader.hpp"
-#include "Log.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -16,7 +16,7 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
 
 Shader::Shader(GLuint ID) : id(ID)
 {
-    KEA_LOG_INFO("Shader created with id: {}", (int) id);
+    KEA_LOG_INFO("Resources", "Shader created with id: {}", (int) id);
 }
 
 Shader::~Shader()
@@ -49,7 +49,7 @@ Shader Shader::LoadFromFile(const std::string& vertexPath, const std::string& fr
     }
     catch (std::ifstream::failure& e)
     {
-        KEA_LOG_ERROR("Unable to read shader file {}\n{}: {}", vertexPath, e.code().message(), e.what());
+        KEA_LOG_ERROR("Resources", "Unable to read shader file {}\n{}: {}", vertexPath, e.code().message(), e.what());
         vertShaderSource = "";
     }
 
@@ -65,7 +65,7 @@ Shader Shader::LoadFromFile(const std::string& vertexPath, const std::string& fr
     }
     catch (std::ifstream::failure& e)
     {
-        KEA_LOG_ERROR("Unable to read shader file {}\n{}: {}", fragmentPath, e.code().message(), e.what());
+        KEA_LOG_ERROR("Resources", "Unable to read shader file {}\n{}: {}", fragmentPath, e.code().message(), e.what());
         fragShaderSource = "";
     }
 
@@ -107,7 +107,7 @@ void Shader::CheckCompileErrors(const GLuint shader, const std::string& type)
         if (!success)
         {
             glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-            KEA_LOG_ERROR("Shader program linking error.");
+            KEA_LOG_ERROR("Resources", "Shader program linking error.");
         }
     }
     else
@@ -116,11 +116,11 @@ void Shader::CheckCompileErrors(const GLuint shader, const std::string& type)
         if (!success)
         {
             glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-            KEA_LOG_ERROR("{} shader compilation error.", type);
+            KEA_LOG_ERROR("Resources", "{} shader compilation error.", type);
         }
     }
     if (!success)
     {
-        KEA_LOG_TRACE(infoLog);
+        KEA_LOG_TRACE("Resources", infoLog);
     }
 }

@@ -15,6 +15,7 @@
 
 // --- INTERNAL ---
 #include "Log.hpp"
+#include "LogMacros.hpp"
 
 // --- EXTERNAL ---
 #include "glad/glad.h"

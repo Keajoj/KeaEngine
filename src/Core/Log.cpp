@@ -1,47 +1,62 @@
 #include "Log.hpp"
+#include "LogMacros.hpp"
 
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
+#include <filesystem>
 #include <vector>
 
-namespace Kea::Log
+namespace Kea
 {
-namespace
-{
-std::shared_ptr<spdlog::logger> logger;
-}
 
-void Initialize()
+void Log::Initialize()
 {
     // Console sink (color)
-    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    console_sink->set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
+    static auto console_sink = GetConsoleSink();
 
-    // File sink
-    auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("kea_engine.log", true);
-    file_sink->set_pattern("[%Y-%m-%d %H:%M:%S] [%l] %v");
+    std::filesystem::create_directory("Logs");
 
-    // Combine sinks
-    std::vector<spdlog::sink_ptr> sinks{console_sink, file_sink};
-    logger = std::make_shared<spdlog::logger>("kea_engine", sinks.begin(), sinks.end());
-
-    logger->set_level(spdlog::level::trace); // Log all levels by default
-    spdlog::set_default_logger(logger);
-    spdlog::flush_on(spdlog::level::warn); // Flush logs on warnings/errors
-
-    KEA_LOG_INFO("Logger initialized!");
-
-    KEA_LOG_TRACE("This is what a {} looks like.", "KEA_LOG_TRACE");
-    KEA_LOG_DEBUG("This is what a {} looks like.", "KEA_LOG_DEBUG");
-    KEA_LOG_INFO("This is what a {} looks like.", "KEA_LOG_INFO");
-    KEA_LOG_WARN("This is what a {} looks like.", "KEA_LOG_WARN");
-    KEA_LOG_ERROR("This is what a {} looks like.", "KEA_LOG_ERROR");
-    KEA_LOG_CRITICAL("This is what a {} looks like.", "KEA_LOG_CRITICAL");
+    for (auto&& name : {"Core", "Renderer", "Events", "Input", "Resources"})
+    {
+        CreateLogger(name);
+    }
 }
 
-std::shared_ptr<spdlog::logger>& GetLogger()
+std::shared_ptr<spdlog::logger> Log::GetLogger(const std::string& name)
 {
+    auto& map = Loggers();
+    auto it = map.find(name);
+    if (it != map.end())
+    {
+        return it->second;
+    }
+
+    // If not found, then create it and return it
+    return CreateLogger(name);
+}
+
+std::shared_ptr<spdlog::logger> Log::CreateLogger(const std::string& name)
+{
+    auto console_sink = GetConsoleSink();
+    auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("Logs/" + std::string(name) + ".log", true);
+    std::vector<spdlog::sink_ptr> sinks{console_sink, file_sink};
+    auto logger = std::make_shared<spdlog::logger>(name, sinks.begin(), sinks.end());
+    logger->set_pattern("[%8T]%^[%l]%$[%n] %v");
+    spdlog::register_logger(logger);
+    Loggers().emplace(name, logger);
     return logger;
 }
-} // namespace Kea::Log
+
+std::unordered_map<std::string, std::shared_ptr<spdlog::logger>>& Log::Loggers()
+{
+    static std::unordered_map<std::string, std::shared_ptr<spdlog::logger>> loggers;
+    return loggers;
+}
+
+std::shared_ptr<spdlog::sinks::sink> Log::GetConsoleSink()
+{
+    static auto sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    return sink;
+}
+} // namespace Kea
